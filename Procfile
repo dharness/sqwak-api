@@ -1,1 +1,1 @@
-web: gunicorn -w 4 --bind 0.0.0.0:8080 sqwak.__init__:app 
+web: gunicorn sqwak.__init__:app 
