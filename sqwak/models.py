@@ -51,7 +51,7 @@ class MlClass(db.Model):
 
 class AudioSample(db.Model):
     __tablename__ = 'audio_sample'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, db.Sequence("audio_sample_id_seq", start=9001), primary_key=True)
     ml_class_id = db.Column(db.Integer, db.ForeignKey("ml_class.id"), nullable=False)
     features = db.Column(postgresql.ARRAY(db.Integer), nullable=False)
     extraction_method = db.Column(db.String, nullable=False)

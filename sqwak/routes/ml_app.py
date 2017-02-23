@@ -82,17 +82,17 @@ def train(user_id, app_id):
 def test(user_id, app_id):
     ml_app = MlApp.query.filter_by(owner_id=user_id, id=app_id).first_or_404()
     file = request.files['file']
-    path = '/usr/src/app/sqwak/uploads/' + secure_filename(file.filename)
-    out_path = '/usr/src/app/sqwak/uploads2/' + secure_filename(file.filename)
-    file.save(path)
 
-    ff = ffmpy.FFmpeg(
-        inputs={path: None},
-        outputs={out_path: None},
-        global_options=['-y']
-    )
-    ff.run()
-    features = feature_extractor.extract(out_path)
+    features = feature_extractor.extract(file)
+
+    print(features)
+
+    # ff = ffmpy.FFmpeg(
+    #     inputs={path: None},
+    #     outputs={out_path: None},
+    #     global_options=['-y']
+    # )
+    # ff.run()
     predictions = model_manager.predict(ml_app.working_model, features)
 
     return jsonify(predictions)

@@ -49,10 +49,13 @@ def predict(working_model, features):
   probabilities = clf.predict_proba(features)
   probabilities = np.multiply(probabilities, 100)
 
+  print(probabilities)
+
   results = []
 
   for p in probabilities:
       for i, value in enumerate(p):
+          print(clf.classes_)
           result = {}
           result['label'] = clf.classes_[i]
           result['probability'] = value
