@@ -1,3 +1,4 @@
+matplotlib.use('Agg')
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate
