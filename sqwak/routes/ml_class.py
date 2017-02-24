@@ -66,6 +66,9 @@ def ml_class(user_id, app_id, class_id):
         return ml_class_schema.jsonify(ml_class)
     else:
         ml_class = MlClass.query.filter_by(id=class_id, ml_app_id=app_id).first_or_404()
+        print("deleting")
         db.session.delete(ml_class)
+        print("deleted")
         db.session.commit()
+        print("comitted")
         return json.dumps({'success':True}), 204, {'ContentType':'application/json'} 

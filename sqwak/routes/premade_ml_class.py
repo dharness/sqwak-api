@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, json
 from sqwak.models import db, MlClass, MlApp, AudioSample
 from sqwak.schemas import ma, ml_class_schema, ml_classes_schema
+from sqlalchemy import text
 
 
 premade_ml_class_controller = Blueprint('premade_ml_class', __name__)
@@ -10,6 +11,7 @@ premade_ml_class_controller = Blueprint('premade_ml_class', __name__)
 def ml_class_collection():
   premade_ml_classes = MlClass.query.filter_by(ml_app_id=None).all()
   return ml_classes_schema.jsonify(premade_ml_classes)
+
 
 @premade_ml_class_controller.route("/<int:class_id>/copy", methods=['POST'])
 def copy(class_id):
@@ -25,16 +27,14 @@ def copy(class_id):
       package_name=str(ml_app_id) + "." + premade_ml_class.class_name)
   db.session.add(ml_class)
   db.session.flush()
-
-  # copy over all the samples
-  audio_samples = premade_ml_class.audio_samples.all()
-  for premade_sample in audio_samples:
-    db.session.add(AudioSample(
-        ml_class_id=ml_class.id,
-        label=premade_sample.label,
-        features=premade_sample.features,
-        extraction_method=premade_sample.extraction_method
-    ))
-
   db.session.commit()
+
+  sql = """INSERT INTO audio_sample( 
+      label, features, extraction_method, in_point, out_point, salience, ml_class_id
+    )
+    SELECT label, features, extraction_method, in_point, out_point, salience, {new_class_id} 
+    FROM audio_sample 
+    WHERE ml_class_id={original_class_id}""".format(new_class_id=ml_class.id, original_class_id=class_id)
+
+  result = db.engine.execute(text(sql))
   return ml_class_schema.jsonify(ml_class)
