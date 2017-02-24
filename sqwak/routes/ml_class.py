@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify, json
-from werkzeug import secure_filename
 from sqwak.services import feature_extractor
 from sqwak.models import db, MlClass, AudioSample, MlApp
 from sqwak.schemas import ma, ml_class_schema, ml_classes_schema

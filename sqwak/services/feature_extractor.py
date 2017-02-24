@@ -7,13 +7,7 @@ import scipy.stats
 from math import floor
 
 
-def extract(file_name):
-    amps, sample_rate = sf.read(file_name)
-
-    if amps.ndim is 2:
-        amps = amps[:,0]
-    else:
-        amps = amps[0:]
+def extract(amps, sample_rate=44100):
 
     window_size_ms = 23.2
     n_fft = int(floor((sample_rate * window_size_ms)/500.) * 2)

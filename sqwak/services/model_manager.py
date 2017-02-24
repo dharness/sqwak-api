@@ -6,6 +6,7 @@ from math import floor
 import pickle
 
 def create_model(ml_classes, pickled=True):
+
   X = []
   Y = []
   for ml_class in ml_classes:
@@ -19,6 +20,7 @@ def create_model(ml_classes, pickled=True):
     Y = Y + y
 
   n = len(Y)
+  print(Y)
 
   cutoff = int(floor(n * 0.7))
 
@@ -35,6 +37,7 @@ def create_model(ml_classes, pickled=True):
   X_test = scaler.transform(X_test)
 
   clf.fit(X_train, Y_train)
+  print(clf.classes_)
 
   return pickle.dumps(clf)
 
@@ -49,9 +52,13 @@ def predict(working_model, features):
   probabilities = clf.predict_proba(features)
   probabilities = np.multiply(probabilities, 100)
 
-  print(probabilities)
-
   results = []
+
+  if len(clf.classes_) <= 1:
+    return [{
+      'label': clf.classes_[0],
+      'probability': probabilities[0][0]
+    }]
 
   for p in probabilities:
       for i, value in enumerate(p):
@@ -61,4 +68,5 @@ def predict(working_model, features):
           result['probability'] = value
           results.append(result)
   
+
   return results
