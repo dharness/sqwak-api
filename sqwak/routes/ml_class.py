@@ -5,6 +5,7 @@ from sqwak.schemas import ma, ml_class_schema, ml_classes_schema
 from slugify import slugify
 from sqwak.forms.MlClass import MlClassForm, MlClassFile
 from sqwak.errors import InvalidUsage
+from sqlalchemy import text
 import random
 
 
@@ -65,10 +66,6 @@ def ml_class(user_id, app_id, class_id):
         db.session.commit()
         return ml_class_schema.jsonify(ml_class)
     else:
-        ml_class = MlClass.query.filter_by(id=class_id, ml_app_id=app_id).first_or_404()
-        print("deleting")
-        db.session.delete(ml_class)
-        print("deleted")
-        db.session.commit()
-        print("comitted")
+        sql = """DELETE FROM ml_class WHERE id={class_id}""".format(class_id=class_id)
+        result = db.engine.execute(text(sql))
         return json.dumps({'success':True}), 204, {'ContentType':'application/json'} 
