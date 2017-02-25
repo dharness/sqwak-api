@@ -11,6 +11,7 @@ from sqwak.routes.ml_app import ml_app_controller
 from sqwak.models import db
 from sqwak.errors import InvalidUsage
 from sqwak.schemas import ma
+from raven.contrib.flask import Sentry
 
 
 app = Flask(__name__)
@@ -19,9 +20,12 @@ app.config.from_object('config')
 
 CORS(app)
 
+
 migrate = Migrate(app, db)
 db.init_app(app)
 ma.init_app(app)
+
+sentry = Sentry(app, dsn='https://815d967b437e4f3b8119e6f51b8208a4:a38514620bf0462db27d649f82ab82cf@sentry.io/142675')
 
 app.register_blueprint(user_controller, url_prefix='/api/v0/user')
 app.register_blueprint(premade_ml_class_controller, url_prefix='/api/v0/premade')

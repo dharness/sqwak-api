@@ -35,7 +35,7 @@ class MlApp(db.Model):
 
 class MlClass(db.Model):
     __tablename__ = 'ml_class'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, db.Sequence("ml_class_id_seq", start=110), primary_key=True)
     ml_app_id = db.Column(db.Integer, db.ForeignKey("ml_app.id"))
     class_name = db.Column(db.String, nullable=False)
     img_name = db.Column(db.String, nullable=True)
