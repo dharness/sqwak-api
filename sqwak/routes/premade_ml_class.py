@@ -9,8 +9,19 @@ premade_ml_class_controller = Blueprint('premade_ml_class', __name__)
 
 @premade_ml_class_controller.route("", methods=['GET'])
 def ml_class_collection():
-  premade_ml_classes = MlClass.query.filter_by(ml_app_id=None).all()
-  return ml_classes_schema.jsonify(premade_ml_classes)
+  # premade_ml_classes = MlClass.query.filter_by(ml_app_id=None)
+  sql = """SELECT ml_class.*, COUNT(audio_sample.id) AS num_samples FROM ml_class, audio_sample 
+      WHERE ml_app_id IS NULL AND ml_class.id = audio_sample.ml_class_id
+      GROUP BY ml_class.id;
+    """
+  result = db.engine.execute(text(sql))
+  premade_classes = []
+  for row in result:
+    premade_classes.append(dict(row))
+
+  return jsonify({
+    "data": premade_classes
+  })
 
 
 @premade_ml_class_controller.route("/<int:class_id>/copy", methods=['POST'])
