@@ -2,19 +2,34 @@ import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects import postgresql
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
 
 class User(db.Model):
-    id = db.Column(db.String, primary_key=True)
-    email = db.Column(db.String(64), nullable=False)
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email = db.Column(db.String(64), nullable=False, unique=True)
     ml_apps = db.relationship('MlApp', backref='user', lazy='dynamic')
+    email_confirmed = db.Column(db.Boolean, default=False)
+    _password = db.Column(db.String(128))
+
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def _set_password(self, plaintext):
+        self._password = generate_password_hash(plaintext)
+
+    def is_correct_password(self, plaintext):
+        return check_password_hash(self._password, plaintext)
 
 class MlApp(db.Model):
     __tablename__ = 'ml_app'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    owner_id = db.Column(db.String, db.ForeignKey("user.id"), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     app_name = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
