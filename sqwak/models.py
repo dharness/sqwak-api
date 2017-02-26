@@ -29,7 +29,7 @@ class User(db.Model):
 class MlApp(db.Model):
     __tablename__ = 'ml_app'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     app_name = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -51,7 +51,7 @@ class MlApp(db.Model):
 class MlClass(db.Model):
     __tablename__ = 'ml_class'
     id = db.Column(db.Integer, db.Sequence("ml_class_id_seq", start=110), primary_key=True)
-    ml_app_id = db.Column(db.Integer, db.ForeignKey("ml_app.id"))
+    ml_app_id = db.Column(db.Integer, db.ForeignKey("ml_app.id", ondelete="CASCADE"))
     class_name = db.Column(db.String, nullable=False)
     img_name = db.Column(db.String, nullable=True)
     package_name = db.Column(db.String, nullable=False)
@@ -67,7 +67,7 @@ class MlClass(db.Model):
 class AudioSample(db.Model):
     __tablename__ = 'audio_sample'
     id = db.Column(db.Integer, db.Sequence("audio_sample_id_seq", start=9001), primary_key=True)
-    ml_class_id = db.Column(db.Integer, db.ForeignKey("ml_class.id"), nullable=False)
+    ml_class_id = db.Column(db.Integer, db.ForeignKey("ml_class.id", ondelete="CASCADE"), nullable=False)
     features = db.Column(postgresql.ARRAY(db.Integer), nullable=False)
     extraction_method = db.Column(db.String, nullable=False)
     label = db.Column(db.String, nullable=False)
