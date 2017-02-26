@@ -35,6 +35,7 @@ def copy(class_id):
   ml_class = MlClass(
       ml_app_id=ml_app_id,
       class_name=premade_ml_class.class_name,
+      img_name=premade_ml_class.img_name,
       package_name=str(ml_app_id) + "." + premade_ml_class.class_name)
   db.session.add(ml_class)
   db.session.flush()
