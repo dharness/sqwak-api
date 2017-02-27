@@ -2,6 +2,6 @@ DEBUG = True
 
 
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-SQLALCHEMY_DATABASE_URI = 'postgres://uktozgszcymdxh:7c252955a78dc26d599a3671ed217b46c37c09ea417a505098788036ea562493@ec2-54-235-240-92.compute-1.amazonaws.com:5432/d455sv8rqkr6mu'
+SQLALCHEMY_DATABASE_URI = 'postgres://kwmfdrxnnnytrl:533e77c9dc99e1f4fb1b37b85ec5bfff05b707d3f362492b13d588bd96b0b48a@ec2-23-21-224-199.compute-1.amazonaws.com:5432/d99bjruc57m7jt'
 AUTH_0_CLIENT_ID = 'l4pxejOXhTOV32BHrZxASIHHuNq4urwh'
 DEV = True
