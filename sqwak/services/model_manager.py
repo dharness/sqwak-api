@@ -4,46 +4,18 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from math import floor
 import pickle
+from models import model_1
 
 def create_model(ml_classes, pickled=True):
-
-  X = []
-  Y = []
-  for ml_class in ml_classes:
-    x = []
-    y = []
-    for audio_sample in ml_class['audio_samples']:
-      x.append(audio_sample['features'])
-      y.append(audio_sample['label'])
-
-    X = X + x
-    Y = Y + y
-
-  n = len(Y)
-  print(Y)
-
-  cutoff = int(floor(n * 0.7))
-
-  X_train = X[:cutoff]
-  Y_train = Y[:cutoff]
-  X_test = X[cutoff:]
-  Y_test = Y[cutoff:]
-
-
-  clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1, shuffle=True)
-  scaler = StandardScaler()
-  scaler.fit(X_train)
-  X_train = scaler.transform(X_train)
-  X_test = scaler.transform(X_test)
-
-  clf.fit(X_train, Y_train)
-  print(clf.classes_)
-
-  return pickle.dumps(clf)
+  model_paramaters = model_1.train(ml_classes)
+  return pickle.dumps(model_paramaters)
 
 
 def predict(working_model, features):
-  clf = pickle.loads(working_model)
+  model_paramaters = pickle.loads(working_model)
+  results = model_1.predict(model_paramaters, features)
+
+  return results
 
   features = np.array(features)
   features = features.reshape(1,-1) 
