@@ -82,9 +82,12 @@ def train(user_id, app_id):
 def test(user_id, app_id):
     ml_app = MlApp.query.filter_by(owner_id=user_id, id=app_id).first_or_404()
     file = request.files['file']
-
+    print(file.read())
+    with open('./recorded.wav', 'w') as f:
+        f.write(file.read())
     amps, sample_rate = amplitude_extractor.extract(file)
-    features = feature_extractor.extract(amps, sample_rate)
+    # features = feature_extractor.extract(amps, sample_rate)
+    features = [1.]*275
     predictions = model_manager.predict(ml_app.working_model, features)
 
     return jsonify(predictions)
