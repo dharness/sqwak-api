@@ -7,6 +7,7 @@ from sqwak.errors import InvalidUsage
 from sqwak.services import model_manager
 from sqwak.services import feature_extractor
 from sqwak.services import amplitude_extractor
+import numpy as np
 
 
 ml_app_controller = Blueprint('ml_app', __name__)
@@ -57,17 +58,11 @@ def one_app(user_id, app_id):
 @ml_app_controller.route("/<int:app_id>/train", methods=['POST'])
 def train(user_id, app_id):
     ml_app = MlApp.query.filter_by(owner_id=user_id, id=app_id).first_or_404()
-    ml_classes = ml_app.ml_classes.all()
-    formated_ml_classes = []
-    for ml_class in ml_classes:
-        audio_samples = ml_class.audio_samples.all()
-        if ml_class.in_model:
-            ml_class.is_edited = False
-            ml_class_data = ml_class_schema.dump(ml_class).data
-            ml_class_data['audio_samples'] = audio_samples_schema.dump(audio_samples).data
-            formated_ml_classes.append(ml_class_data)
 
-    pickled_model = model_manager.create_model(formated_ml_classes)
+    training_data = ml_app.training_data
+    training_data = np.array(training_data, dtype=object)
+
+    pickled_model = model_manager.create_model(training_data)
     ml_app.working_model = pickled_model;
     ml_app.working_model_dirty = False
     db.session.commit()

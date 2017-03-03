@@ -11,17 +11,18 @@ import tempfile
 # Prepare the data
 ###############################################################
 def make_batches(samples, keys, batch_size=-1):
+
+  one_hot_labels = []
   feature_sets = []
-  labels = []
   num_classes = len(keys.keys())
   
-  for sample in samples:
-    class_id = keys[sample['label']]
+  for i, sample in enumerate(samples):
+    label = sample[0]
+    feature_set = sample[1]
     one_hot = [0]*num_classes
-    one_hot[class_id] = 1
-
-    labels.append(one_hot)
-    feature_sets.append(sample['features'])
+    one_hot[keys[label]] = 1
+    one_hot_labels.append(one_hot)
+    feature_sets.append(feature_set)
 
   num_batches = len(feature_sets)/batch_size
   
@@ -34,7 +35,7 @@ def make_batches(samples, keys, batch_size=-1):
       to_pos = i*batch_size+batch_size
       
       features_batch = feature_sets[from_pos : to_pos]
-      labels_batch = labels[from_pos : to_pos]
+      labels_batch = one_hot_labels[from_pos : to_pos]
       batches.append({
           'feature_sets': features_batch,
           'labels': labels_batch
@@ -45,17 +46,17 @@ def make_batches(samples, keys, batch_size=-1):
 ###############################################################
 # Train the model
 ###############################################################
-def train(ml_classes):
+def train(samples):
   
-  samples = []
   keys = {}
-  for i, ml_class in enumerate(ml_classes):
-    keys[ml_class['class_name']] = i
-    samples += ml_class['audio_samples']
+
+  unique_ml_class_names = set(samples[:,0])
+  for i, ml_class_name in enumerate(unique_ml_class_names):
+    keys[ml_class_name] = i
 
   random.shuffle(samples)
   batches = make_batches(samples, keys, 20)
-  num_classes = len(keys.keys())
+  num_classes = len(unique_ml_class_names)
 
   x = tf.placeholder(tf.float32, [None, 275])
   W = tf.Variable(tf.zeros([275, num_classes]))

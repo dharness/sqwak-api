@@ -44,6 +44,11 @@ class MlApp(db.Model):
         lazy='dynamic')
 
     @hybrid_property
+    def training_data(self):
+        rows = db.session.execute(""" SELECT class_name, features FROM ml_class, audio_sample WHERE ml_class.id=audio_sample.ml_class_id AND ml_class.ml_app_id={ml_app_id} AND ml_class.in_model=true;""".format(ml_app_id=self.id))
+        return rows.fetchall()
+
+    @hybrid_property
     def num_samples(self):
         row = db.session.execute("""SELECT COUNT(*) FROM (ml_app INNER JOIN ml_class ON (ml_app.id = ml_class.ml_app_id) INNER JOIN audio_sample ON (audio_sample.ml_class_id = ml_class.id)) WHERE ml_app.id = 2;""")
         return row.fetchone()[0]
@@ -70,7 +75,6 @@ class AudioSample(db.Model):
     ml_class_id = db.Column(db.Integer, db.ForeignKey("ml_class.id", ondelete="CASCADE"), nullable=False)
     features = db.Column(postgresql.ARRAY(db.Integer), nullable=False)
     extraction_method = db.Column(db.String, nullable=False)
-    label = db.Column(db.String, nullable=False)
     in_point = db.Column(db.Integer)
     out_point = db.Column(db.Integer)
     salience = db.Column(db.Integer)

@@ -42,9 +42,9 @@ def copy(class_id):
   db.session.commit()
 
   sql = """INSERT INTO audio_sample( 
-      label, features, extraction_method, in_point, out_point, salience, ml_class_id
+      features, extraction_method, in_point, out_point, salience, ml_class_id
     )
-    SELECT label, features, extraction_method, in_point, out_point, salience, {new_class_id} 
+    SELECT features, extraction_method, in_point, out_point, salience, {new_class_id} 
     FROM audio_sample 
     WHERE ml_class_id={original_class_id}""".format(new_class_id=ml_class.id, original_class_id=class_id)
 
