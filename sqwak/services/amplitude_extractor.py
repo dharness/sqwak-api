@@ -17,7 +17,7 @@ def extract(file_like):
         return [], 0
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        return [], 0
+        return ([], 0)
 
 def process_file(file_like):
     ff = ffmpy.FFmpeg(
