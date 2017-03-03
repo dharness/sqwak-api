@@ -8,8 +8,8 @@ import soundfile as sf
 
 def extract(file_like):
     try:
-        print(file_like)
         stdout, stderr = process_file(file_like)
+        print(stdout)
         amps, sample_rate = read_wave_from_bytes(stdout)
         return amps, sample_rate
     except ffmpy.FFRuntimeError as e:
