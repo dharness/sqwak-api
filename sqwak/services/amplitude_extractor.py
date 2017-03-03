@@ -9,7 +9,6 @@ import soundfile as sf
 def extract(file_like):
     try:
         stdout, stderr = process_file(file_like)
-        print(stdout, stderr)
         amps, sample_rate = read_wave_from_bytes(stdout)
         return amps, sample_rate
     except ffmpy.FFRuntimeError as e:
@@ -34,6 +33,7 @@ def read_wave_from_bytes(byte_string):
         temp.write(byte_string)
         amps, sample_rate = sf.read(temp.name)
         temp.close()
+        print(amps)
         if amps.ndim is 2:
             amps = amps[:,0]
         else:
