@@ -29,10 +29,10 @@ def process_file(file_like):
     return stdout, stderr
 
 def read_wave_from_bytes(byte_string):
-    print(byte_string)
     with tempfile.NamedTemporaryFile() as temp:
         temp.write(byte_string)
         amps, sample_rate = sf.read(temp.name)
+        print(amps)
         temp.close()
         if amps.ndim is 2:
             amps = amps[:,0]
