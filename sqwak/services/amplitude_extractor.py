@@ -29,7 +29,7 @@ def process_file(file_like):
     return stdout, stderr
 
 def read_wave_from_bytes(byte_string):
-    with tempfile.NamedTemporaryFile() as temp:
+    with tempfile.NamedTemporaryFile(dir='./tmp') as temp:
         temp.write(byte_string)
         print(temp.name)
         print(temp.read())
