@@ -9,7 +9,7 @@ import soundfile as sf
 def extract(file_like):
     try:
         stdout, stderr = process_file(file_like)
-        print(stdout)
+        print(stdout, stderr)
         amps, sample_rate = read_wave_from_bytes(stdout)
         return amps, sample_rate
     except ffmpy.FFRuntimeError as e:
@@ -26,6 +26,7 @@ def process_file(file_like):
         outputs={'pipe:1': '-ar 44100 -acodec pcm_s16le -f wav'},
         global_options=['-y', '-loglevel panic']
     )
+    print(file_like.read())
     stdout, stderr = ff.run(input_data=file_like.read(), stdout=subprocess.PIPE)
     return stdout, stderr
 
