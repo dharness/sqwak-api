@@ -20,6 +20,7 @@ app.config.from_object('config')
 
 
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 db.init_app(app)
