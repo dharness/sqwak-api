@@ -16,8 +16,8 @@ def extract(file_like):
         print(e)
         return [], 0
     except:
-        print("Unexpected error:", sys.exc_info()[0])
-        return ([], 0)
+        print('Unknown exception')
+        return [], 0
 
 def process_file(file_like):
     ff = ffmpy.FFmpeg(
@@ -33,7 +33,6 @@ def read_wave_from_bytes(byte_string):
         temp.write(byte_string)
         amps, sample_rate = sf.read(temp.name)
         temp.close()
-        print(amps)
         if amps.ndim is 2:
             amps = amps[:,0]
         else:
