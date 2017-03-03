@@ -10,6 +10,7 @@ def extract(file_like):
     try:
         stdout, stderr = process_file(file_like)
         amps, sample_rate = read_wave_from_bytes(stdout)
+        print(amps)
         return amps, sample_rate
     except ffmpy.FFRuntimeError as e:
         print('ffmpy.FFRuntimeError')
