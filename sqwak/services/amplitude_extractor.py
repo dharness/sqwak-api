@@ -4,6 +4,7 @@ import sys
 import subprocess
 import tempfile
 import soundfile as sf
+import scipy.io.wavfile
 
 
 def extract(file_like):

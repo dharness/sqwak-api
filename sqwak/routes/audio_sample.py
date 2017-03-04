@@ -21,7 +21,6 @@ def audio_sample_collection(user_id, app_id, class_id):
     
     audio_sample = AudioSample(
         ml_class_id=ml_class.id,
-        label=slugify(ml_class.class_name),
         features=features,
         extraction_method="urban_sound_1"
     )
