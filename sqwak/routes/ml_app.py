@@ -63,7 +63,7 @@ def train(user_id, app_id):
     training_data = np.array(training_data, dtype=object)
 
     pickled_model = model_manager.create_model(training_data)
-    ml_app.working_model = pickled_model;
+    ml_app.working_model = pickled_model
     ml_app.working_model_dirty = False
     db.session.commit()
 
