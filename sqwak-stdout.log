@@ -1,9 +1,8 @@
-[2017-03-04 13:37:25 -0500] [85694] [INFO] Starting gunicorn 19.6.0
-[2017-03-04 13:37:25 -0500] [85694] [INFO] Listening at: http://0.0.0.0:5000 (85694)
-[2017-03-04 13:37:25 -0500] [85694] [INFO] Using worker: gevent
-[2017-03-04 13:37:25 -0500] [85697] [INFO] Booting worker with pid: 85697
-[2017-03-04 13:39:48 -0500] [85694] [INFO] Handling signal: term
-[2017-03-04 13:39:48 -0500] [85697] [INFO] Worker exiting (pid: 85697)
 Database created!
 Database created!
-[2017-03-04 13:39:48 -0500] [85694] [INFO] Shutting down: Master
+Unknown exception
+Unknown exception
+Database created!
+Database created!
+Database created!
+Database created!
