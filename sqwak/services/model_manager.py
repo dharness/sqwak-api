@@ -4,7 +4,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from math import floor
 import pickle
-from models import model_1
+from .models import model_1
 
 def create_model(ml_classes, pickled=True):
   model_paramaters = model_1.train(ml_classes)
@@ -34,7 +34,7 @@ def predict(working_model, features):
 
   for p in probabilities:
       for i, value in enumerate(p):
-          print(clf.classes_)
+          print((clf.classes_))
           result = {}
           result['label'] = clf.classes_[i]
           result['probability'] = value

@@ -14,7 +14,7 @@ def make_batches(samples, keys, batch_size=-1):
 
   one_hot_labels = []
   feature_sets = []
-  num_classes = len(keys.keys())
+  num_classes = len(list(keys.keys()))
   
   for i, sample in enumerate(samples):
     label = sample[0]
@@ -91,7 +91,7 @@ def train(samples):
 # Predict new samples
 ###############################################################
 def predict(model_paramaters, features):
-  n = len(model_paramaters['class_labels'].keys())
+  n = len(list(model_paramaters['class_labels'].keys()))
   x = tf.placeholder(tf.float32, [None, 275])
   W = tf.placeholder(tf.float32, [275, n])
   b = tf.placeholder(tf.float32, [n])
