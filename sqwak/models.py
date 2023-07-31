@@ -40,12 +40,12 @@ class MlApp(db.Model):
   query_url = db.Column(db.String)
   working_model = db.Column(db.LargeBinary)
   working_model_dirty = db.Column(db.Boolean, default=True)
-  published_model = db.Column(db.String)
+  published_model = db.Column(db.LargeBinary)
   last_published = db.Column(db.DateTime)
   ml_classes = db.relationship('MlClass',
                                backref="ml_app",
                                cascade="all, delete-orphan",
-                               lazy='dynamic')
+                               lazy='joined')
 
   @hybrid_property
   def training_data(self):
@@ -57,7 +57,9 @@ class MlApp(db.Model):
 
   @hybrid_property
   def num_samples(self):
-    query = text("""SELECT COUNT(*) FROM (ml_app INNER JOIN ml_class ON (ml_app.id = ml_class.ml_app_id) INNER JOIN audio_sample ON (audio_sample.ml_class_id = ml_class.id)) WHERE ml_app.id = 2;""")
+    ml_app_id = self.id
+    query = text(
+        f"SELECT COUNT(*) FROM (ml_app INNER JOIN ml_class ON (ml_app.id = ml_class.ml_app_id) INNER JOIN audio_sample ON (audio_sample.ml_class_id = ml_class.id)) WHERE ml_app.id = {ml_app_id};")
     row = db.session.execute(query)
     return row.fetchone()[0]
 

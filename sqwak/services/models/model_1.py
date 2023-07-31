@@ -1,11 +1,7 @@
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from math import floor
 import numpy as np
-import os
-import glob
 import random
-import tempfile
 
 
 ###############################################################

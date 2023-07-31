@@ -1,3 +1,4 @@
+import requests
 import pickle
 from .models import model_1
 
