@@ -38,7 +38,7 @@ class MlApp(db.Model):
   created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
   updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
   query_url = db.Column(db.String)
-  working_model = db.Column(db.String)
+  working_model = db.Column(db.LargeBinary)
   working_model_dirty = db.Column(db.Boolean, default=True)
   published_model = db.Column(db.String)
   last_published = db.Column(db.DateTime)
@@ -49,8 +49,10 @@ class MlApp(db.Model):
 
   @hybrid_property
   def training_data(self):
-    rows = db.session.execute(
-        """ SELECT class_name, features FROM ml_class, audio_sample WHERE ml_class.id=audio_sample.ml_class_id AND ml_class.ml_app_id={ml_app_id} AND ml_class.in_model=true;""".format(ml_app_id=self.id))
+    query_string = """ SELECT class_name, features FROM ml_class, audio_sample WHERE ml_class.id=audio_sample.ml_class_id AND ml_class.ml_app_id={ml_app_id} AND ml_class.in_model=true;"""
+    query = text(query_string.format(ml_app_id=self.id))
+    rows = db.session.execute(query)
+
     return rows.fetchall()
 
   @hybrid_property

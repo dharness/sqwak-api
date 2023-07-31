@@ -1,3 +1,4 @@
+from marshmallow import fields
 from flask_marshmallow import Marshmallow
 from .models import User, MlApp, MlClass, AudioSample
 ma = Marshmallow()
@@ -13,6 +14,8 @@ users_schema = UserSchema(many=True)
 
 
 class MlAppSchema(ma.SQLAlchemyAutoSchema):
+  working_model = fields.Raw()
+
   class Meta:
     model = MlApp
 
