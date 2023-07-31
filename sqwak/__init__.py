@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use('Agg')
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate

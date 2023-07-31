@@ -1,1 +1,0 @@
-web: gunicorn sqwak.__init__:app 

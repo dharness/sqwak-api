@@ -1,3 +1,7 @@
+### Getting started:
+
+```
 pip install -r requirements.txt
-brew install ffmpeg 
-gunicorn --config gunicorn_config.py sqwak.__init__:app
+brew install ffmpeg
+flask --app sqwak.__init__:app run --debug -p 8000
+```

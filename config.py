@@ -1,7 +1,9 @@
+import os
+
 DEBUG = True
 
 
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-SQLALCHEMY_DATABASE_URI = 'postgresql://dylan:@localhost:5432/sqwak'
-AUTH_0_CLIENT_ID = 'l4pxejOXhTOV32BHrZxASIHHuNq4urwh'
+SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+AUTH_0_CLIENT_ID = os.getenv('AUTH_0_CLIENT_ID')
 DEV = True
