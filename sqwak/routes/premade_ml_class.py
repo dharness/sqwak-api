@@ -6,6 +6,17 @@ from sqlalchemy import text
 
 premade_ml_class_controller = Blueprint('premade_ml_class', __name__)
 
+class_names = ['air_conditioner',
+               'car_horn',
+               'children_playing',
+               'dog_bark',
+               'drilling',
+               'engine_idling',
+               'gun_shot',
+               'jackhammer',
+               'siren',
+               'street_music']
+
 
 @premade_ml_class_controller.route("", methods=['GET'])
 def ml_class_collection():
@@ -14,20 +25,31 @@ def ml_class_collection():
       WHERE ml_app_id IS NULL AND ml_class.id = audio_sample.ml_class_id
       GROUP BY ml_class.id;
     """
-  result = db.engine.execute(text(sql))
+  result = db.session.execute(text(sql))
   premade_classes = []
-  for row in result:
-    premade_classes.append(dict(row))
+  for class_name in class_names:
+    premade_classes.append({
+        "ml_app_id": None,
+        "class_name": class_name,
+        "img_name": class_name,
+        "package_name": "",
+        "is_edited": False,
+        "in_model": False,
+        "num_samples": 0
+    })
+  # for row in result:
+  #   premade_classes.append(dict(row))
 
   return jsonify({
-    "data": premade_classes
+      "data": premade_classes
   })
 
 
 @premade_ml_class_controller.route("/<int:class_id>/copy", methods=['POST'])
 def copy(class_id):
-  premade_ml_class = MlClass.query.filter_by(id=class_id, ml_app_id=None).first_or_404()
-  
+  premade_ml_class = MlClass.query.filter_by(
+      id=class_id, ml_app_id=None).first_or_404()
+
   ml_app_id = request.json['to_app_id']
   ml_app = MlApp.query.filter_by(id=ml_app_id).first_or_404()
 

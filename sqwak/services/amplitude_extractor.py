@@ -32,8 +32,8 @@ def process_file(file_like):
 def read_wave_from_bytes(byte_string):
     with tempfile.NamedTemporaryFile(dir='./tmp') as temp:
         temp.write(byte_string)
-        print(temp.name)
-        print(temp.read())
+        print((temp.name))
+        print((temp.read()))
         amps, sample_rate = sf.read(temp.name)
         print(amps)
         temp.close()
